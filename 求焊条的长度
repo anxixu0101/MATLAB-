@@ -1,0 +1,116 @@
+I=imread('E:\\Python\\88.png');%提取图像
+
+img=rgb2gray(I);
+
+[m,n]=size(img);
+
+BW1=edge(img,'sobel'); %用Sobel算子进行边缘检测
+
+BW2=edge(img,'roberts');%用Roberts算子进行边缘检测
+
+BW3=edge(img,'prewitt'); %用Prewitt算子进行边缘检测
+% 
+% BW4=edge(img,'log'); %用Log算子进行边缘检测
+% 
+ BW5=edge(img,'canny','0.15'); %用Canny算子进行边缘检测
+% 
+% h=fspecial('gaussian',5);%?高斯滤波
+% 
+% BW6=edge(img,'canny');%高斯滤波后使用Canny算子进行边缘检测
+% 
+figure(1), imshow(BW1);
+
+title('sobel edge check');
+
+figure(2), imshow(BW2);
+
+title('roberts edge check');
+
+figure(3), imshow(BW3);
+
+title('prewitt edge check');
+
+
+% I= imread('E:\\Python\\88.png');
+% BW1=im2bw(I,0.95);
+% BW2=double(BW1);
+% BW3=edge(BW2,'sobel');
+% [H,T,R]=hough(BW3);
+% imshow(H,[],'XData',T,'YData',R,'InitialMagnification','fit');
+% xlabel('\theta');ylabel('\rho');
+% axis on,axis normal,hold on;
+% P=houghpeaks(H,5,'threshold',ceil(0.3*max(H(:))));
+% x=T(P(:,2));y=R(P(:,1));
+% plot(x,y,'s','color','white');
+% lines=houghlines(BW3,T,R,P,'FillGap',5,'MinLength',7);
+% figure,imshow(BW3),hold on; 
+% In images.internal.initSize (line 71)
+% In imshow (line 336) 
+% max_len=0;
+% for k=1:length(lines)
+%        xy=[lines(k).point1;lines(k).point2];
+%        plot(xy(:,1),xy(:,2),'lineWidth',2,'Color','green');
+%        plot(xy(1,1),xy(1,2),'x''lineWidth',2,'Color','yellow');
+%        plot(xy(2,1),xy(2,2),'x''lineWidth',2,'Color','red');  
+%        len=norm(lines(k).point1-lines(k).point2);
+%        if(len>max_len)
+%            max_len=len;
+%            xy_long=xy;
+%        end
+% end
+% plot(xy_long(:,1),xy_long(:,2),'LineWidth',2,'Color','cyan');
+
+% I=imread('E:\\Python\\88.png');
+
+Ihsv=rgb2hsv(I);
+Iv=Ihsv(:,:,3);                    %提取v空间
+Ivl=Iv(500:end,:);              %截取下半部
+Iedge=edge(Ivl,'sobel');    %边沿检测
+Iedge = imdilate(Iedge,ones(3));%图像膨胀
+
+%新建窗口，绘图用
+figure (2)
+imshow(Iedge);
+hold on
+num=0;
+for m=450:1199
+ if Iedge(12,m)==1
+     num=num+1;
+ else
+     break;
+ end
+ 
+end
+fprintf('求得的金属条长度=');
+num
+num_1=0;
+for p=1:303
+ for n=1:1199
+  if Iedge(p,n)==1
+     num_1=num_1+1;
+     if num_1>=500
+         x=p;
+         
+     end
+   else
+     break;
+ end
+end
+end
+fprintf('计算得到的金属条高度');
+x
+num_2=0;
+%% 计算断点
+for p_1=260:303
+    if Iedge(p_1,454)==0
+        num_2=num_2+1;
+%     else
+%         num_2=num_2+1;
+%         break;
+    end
+end
+fprintf('计算得到的断点长度');
+num_2
+
+
+
